@@ -1,0 +1,11 @@
+data:
+  k: 3
+  seed: 42
+
+training:
+  batch_size: 256
+  epochs: 50
+  lr: 0.001
+
+model:
+  embedding_dim: 64
