@@ -5,7 +5,7 @@ A Masked Autoencoder-based Recommender System built on the MovieLens dataset. Th
 **Goal**: Predict missing ratings in the MovieLens dataset and provide top-N recommendations for each user.  
 **Approach**: Use an autoencoder to learn latent representations of users, masking out missing ratings during training.  
 **Evaluation**: Recall@K metric on unseen ratings (test set).  
-**Baseline**: User mean ratings and matrix factorization.  
+**Baseline**: Matrix factorization gave a recall @ 3 of 0.0024
 
 ## ✨Features
 - Converts the MovieLens dataset into a user-item rating matrix.
