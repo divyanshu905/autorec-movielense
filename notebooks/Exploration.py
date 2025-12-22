@@ -7,6 +7,7 @@
     # Eval on missing rating
     # A masked-loss autoencoder trained on MovieLens that outperforms matrix factorization on Recall@10 while producing interpretable latent factors
     # Baseline : Matrix Factorization/User mean
+
 #%% Load Data Lib
 import sys 
 from pathlib import Path
@@ -134,3 +135,5 @@ for _, row in test_df.iterrows():
 recall_at_K = hits / len(test_df)
 recall_at_K
 
+
+# %%

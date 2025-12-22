@@ -40,6 +40,19 @@ A Masked Autoencoder-based Recommender System built on the MovieLens dataset. Th
    - **Metric**: Recall@3
    - **Result**: 0.021 (on test set)
 
+### Third Iteration:
+  - **Architecture**: Multi-layer autoencoder  
+  - **Hidden Dimension**: 64  
+  - **Loss**: Masked Mean Squared Error (only considers observed ratings)  
+  - **Optimizer**: Adam  
+  - **Learning Rate**: 0.001  
+  - **Epochs**: 1000 
+  - **Regularization**: Dropout at last layer of encoder with p=0.5 
+
+  - **Evaluation**
+   - **Metric**: Recall@3
+   - **Result**: 0.0222 (on test set)
+
 ⚠️ **Note**: This low recall indicates the model is underperforming, which is common for a simple autoencoder on highly sparse datasets. Possible improvements include:
 - Adding deeper layers to the autoencoder
 - Using regularization (dropout, weight decay)
