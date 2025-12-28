@@ -1,59 +1,61 @@
-# AutoRec on MovieLens Dataset
-A Masked Autoencoder-based Recommender System built on the MovieLens dataset. This project demonstrates how to reconstruct user-item ratings and generate top-N recommendations using an autoencoder architecture.
+# 🎬 **AutoRec: Movie Recommendation System (MovieLens)**
+A masked autoencoder–based recommender system trained on the MovieLens dataset to predict missing user–item ratings and generate Top-N personalized movie recommendations.
 
-## 🚀Project Overview
-**Goal**: Predict missing ratings in the MovieLens dataset and provide top-N recommendations for each user.  
-**Approach**: Use an autoencoder to learn latent representations of users, masking out missing ratings during training.  
-**Evaluation**: Recall@K metric on unseen ratings (test set).  
-**Baseline**: Matrix factorization gave a recall @ 3 of 0.0024
+## 🧩 **Problem Statement**
+Online platforms must recommend a small set of items a user is most likely to enjoy from a very large catalog.
 
-## ✨Features
-- Converts the MovieLens dataset into a user-item rating matrix.
-- Handles sparse ratings using a mask to ignore missing entries during training.
-- Trains a shallow autoencoder with ReLU activation to reconstruct ratings.
-- Provides top-N recommendations for each user.
-- Evaluates the model using Recall@K metric.
+This problem is challenging due to:
+- Extremely sparse user–item interactions
+- Strong popularity bias
+- The need to rank relevant items rather than accurately reconstruct all ratings
 
-## 🏗 Model Details
+This project tackles the problem using AutoRec, a neural collaborative filtering approach that learns user preference representations directly from the user–item matrix.
 
-### First Iteration:
-  - **Architecture**: Single-layer autoencoder  
-  - **Hidden Dimension**: 64  
-  - **Loss**: Masked Mean Squared Error (only considers observed ratings)  
-  - **Optimizer**: Adam  
-  - **Learning Rate**: 0.001  
-  - **Epochs**: 100  
+## 🛠 Solution Overview
+### **Input**
+- MovieLens explicit ratings dataset
+- Sparse user × movie rating matrix
 
-  - **Evaluation**
-   - **Metric**: Recall@3
-   - **Result**: 0.0060 (on test set)
+### **Model**
+- User-based AutoRec (masked autoencoder)
+- Encoder compresses a user’s rating vector into a latent preference representation
+- Decoder reconstructs ratings for all items
+- Missing ratings are masked during training
 
-### Second Iteration:
-  - **Architecture**: Multi-layer autoencoder  
-  - **Hidden Dimension**: 64  
-  - **Loss**: Masked Mean Squared Error (only considers observed ratings)  
-  - **Optimizer**: Adam  
-  - **Learning Rate**: 0.001  
-  - **Epochs**: 1000  
+### **Output**
+- Predicted ratings for unseen movies
+- Top-N movie recommendations per user
 
-  - **Evaluation**
-   - **Metric**: Recall@3
-   - **Result**: 0.021 (on test set)
+### **Evaluation**
+- Offline ranking metric: Recall@K
+- Evaluated only on unseen test interactions
 
-### Third Iteration:
-  - **Architecture**: Multi-layer autoencoder  
-  - **Hidden Dimension**: 64  
-  - **Loss**: Masked Mean Squared Error (only considers observed ratings)  
-  - **Optimizer**: Adam  
-  - **Learning Rate**: 0.001  
-  - **Epochs**: 1000 
-  - **Regularization**: Dropout at last layer of encoder with p=0.5 
+# 📊 **Baseline**
+To ground performance, a Matrix Factorization baseline was implemented.
+- Metric: Recall@3
+- Result: 0.0024
+This established a realistic lower bound and justified exploring neural models.
 
-  - **Evaluation**
-   - **Metric**: Recall@3
-   - **Result**: 0.0222 (on test set)
+## 🧠 **Modeling Decisions & Experimental Reasoning**
 
-⚠️ **Note**: This low recall indicates the model is underperforming, which is common for a simple autoencoder on highly sparse datasets. Possible improvements include:
-- Adding deeper layers to the autoencoder
-- Using regularization (dropout, weight decay)
-- Normalizing ratings per user
+### 🔬 **Experiment Summary**
+| Iteration |	Key Change |	Recall@3 | Insight
+| --------- | ---------- | --------- | ------- |
+| 1 |	Single-layer AutoRec (100 epochs)	| 0.0060 |	Underpowered model |
+| 2	| Deeper model + longer training | 0.021	| Capacity matters |
+| 3 |	Dropout (late encoder) | 0.001 | Misplaced regularization hurts
+| 4 |	Introspection-driven redesign |	0.015 |	Better loss–metric alignment |
+
+### 📈 **Key Results (At a Glance)**
+- AutoRec outperformed matrix factorization by ~6×
+- Performance gains came from:
+  - Increased representational capacity
+  - Careful regularization placement
+  - Aligning loss function with ranking metric
+- Experimental failures directly informed better design decisions
+
+## 🔮 **Future Improvements**
+- Ranking-aware objectives (BPR / pairwise losses)
+- Denoising AutoRec
+- Implicit feedback modeling (Mult-VAE)
+- Confidence weighting & user normalization

@@ -14,6 +14,27 @@ def load_raw_ratings():
     cols = ['user_id', 'item_id', 'rating', 'timestamp']
     return pd.read_csv(path, sep="\t", names=cols) 
 
+def load_genres():
+    genre_path = RAW_DIR / "u.genre"
+    genre_df = pd.read_csv(genre_path, sep="|", header=None, names=['genre', 'genre_id'])
+    genre_df.set_index("genre_id", inplace=True)
+    return genre_df["genre"].to_dict()
+
+def load_items(genre_dict):
+    item_path = RAW_DIR / "u.item"
+    cols = ["item_id", "title", "release_date", "video_release_date", "imdb_url"] + [f"genre_{i}" for i in range(19)]
+    
+    items_df = pd.read_csv(item_path, sep="|", names=cols, encoding='latin-1')
+
+    def get_genres(row):
+        return [genre_dict[i] for i in range(19) if row[f'genre_{i}'] == 1]
+
+    items_df['genres'] = items_df.apply(get_genres, axis=1)
+
+    final_df = items_df[['item_id', 'title', 'genres']]
+
+    return final_df
+
 def leave_one_out_split(df, k, seed):
     train_rows, test_rows = [], []
 
